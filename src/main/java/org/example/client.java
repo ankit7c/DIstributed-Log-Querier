@@ -15,17 +15,11 @@ public class client {
         Scanner sc = new Scanner(System.in);
         String command = sc.nextLine();
 
-        System.out.println(command);
+        System.out.println("Command to be executed is " + command);
 
-        String[] ip_address = {"127.0.0.1"};
-
-//        client.run(ip_address[0],0, command);
-//        client.run(ip_address[0],1, command);
-//        client.run(ip_address[0],2, command);
-//        client.run(ip_address[0],3, command);
         for (int nodes=0; nodes<1; nodes++){
-            client_component client = new client_component(properties.getProperty("machine.ip"),
-                    Integer.parseInt(properties.getProperty("port.number")), command);
+            client_component client = new client_component(properties.getProperty("peer.machine.ip" + nodes),
+                    Integer.parseInt(properties.getProperty("peer.machine.port" + nodes)), command);
             client.start();
         }
 

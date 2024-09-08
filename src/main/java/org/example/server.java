@@ -16,7 +16,7 @@ public class server {
         {
             server = new ServerSocket(5000);
             System.out.println("Server started");
-            System.out.println("Waiting for a client ...");
+            System.out.println("Waiting for a client to connect...");
             while(true) {
                 socket = server.accept();
 
@@ -25,11 +25,22 @@ public class server {
                 InputStream inputStream = socket.getInputStream();
                 DataInputStream dataInputStream = new DataInputStream(inputStream);
 
-                String response = dataInputStream.readUTF();
+                String request = dataInputStream.readUTF();
 
                 OutputStream outputStream = socket.getOutputStream();
                 DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
                 dataOutputStream.writeUTF("command received");
+
+                String response = "";
+                //Enter the querying code below
+                //------------
+                while(!response.equals("Query Completed")){
+
+                    if(true){
+                        response = "Query Completed";
+                    }
+                    dataOutputStream.writeUTF("Query Completed");
+                }
 
                 socket.close();
             }
