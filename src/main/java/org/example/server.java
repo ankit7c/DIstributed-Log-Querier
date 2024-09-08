@@ -1,8 +1,11 @@
 package org.example;
 
+import org.unix4j.Unix4j;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 public class server {
 
@@ -31,9 +34,14 @@ public class server {
                 DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
                 dataOutputStream.writeUTF("command received");
 
+
                 String response = "";
                 //Enter the querying code below
                 //------------
+                List<String> responseList = GrepExecutor.executeGrep(request);
+                //TODO for now printing it later send it back to client
+                System.out.println(responseList);
+
                 while(!response.equals("Query Completed")){
 
                     if(true){
