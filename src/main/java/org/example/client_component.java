@@ -1,8 +1,12 @@
 package org.example;
 
+import org.example.config.CLIPrinter;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class client_component extends Thread {
 
@@ -22,6 +26,7 @@ public class client_component extends Thread {
         // establish a connection
         try {
             Socket socket = null;
+            ObjectInputStream ois = null;
 //            ServerSocket serverSocket = new ServerSocket(5001);
             try {
                 socket = new Socket(ipAddress, port);
@@ -42,6 +47,16 @@ public class client_component extends Thread {
             while(!response.equals("Query Completed")) {
                 response = dataInputStream.readUTF();
                 System.out.println(response);
+            }
+
+            try {
+                ois = new ObjectInputStream(socket.getInputStream());
+                List<String> obj = (List<String>) ois.readObject();
+                System.out.println(obj.size());
+                CLIPrinter cliPrinter = new CLIPrinter();
+                cliPrinter.printResult(obj);
+            }catch (Exception e) {
+                e.printStackTrace();
             }
 
             //close the connection

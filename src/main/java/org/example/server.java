@@ -5,6 +5,8 @@ import org.unix4j.Unix4j;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.MessageDigestSpi;
+import java.util.ArrayList;
 import java.util.List;
 
 public class server {
@@ -13,11 +15,11 @@ public class server {
         System.out.println("Server is running");
         Socket socket = null;
         ServerSocket server = null;
-        DataInputStream in =  null;
+        ObjectOutputStream oos = null;
         // starts server and waits for a connection
         try
         {
-            server = new ServerSocket(5000);
+            server = new ServerSocket(5001);
             System.out.println("Server started");
             System.out.println("Waiting for a client to connect...");
             while(true) {
@@ -48,9 +50,16 @@ public class server {
                         response = "Query Completed";
                     }
                     dataOutputStream.writeUTF("Query Completed");
+                    dataOutputStream.flush();
+
+                    oos = new ObjectOutputStream(socket.getOutputStream());
+                    oos.writeObject(responseList);
                 }
 
                 socket.close();
+                dataOutputStream.close();
+                dataInputStream.close();
+                oos.close();
             }
         }
         catch(IOException i)
