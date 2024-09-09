@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.config.AppConfig;
 import org.unix4j.Unix4j;
 
 import java.io.*;
@@ -8,6 +9,7 @@ import java.net.Socket;
 import java.security.MessageDigestSpi;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class server {
 
@@ -17,9 +19,11 @@ public class server {
         ServerSocket server = null;
         ObjectOutputStream oos = null;
         // starts server and waits for a connection
+        AppConfig appConfig = new AppConfig();
+        Properties properties = appConfig.readConfig();
         try
         {
-            server = new ServerSocket(5001);
+            server = new ServerSocket(Integer.parseInt(properties.getProperty("port.number")));
             System.out.println("Server started");
             System.out.println("Waiting for a client to connect...");
             while(true) {

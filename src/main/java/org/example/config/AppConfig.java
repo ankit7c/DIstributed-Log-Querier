@@ -10,7 +10,7 @@ public class AppConfig {
     public Properties readConfig(){
         Properties prop = null;
         try {
-            prop = readPropertiesFile("C:\\Users\\saura\\Documents\\Distributed_Systems\\Plain_Java\\src\\main\\resources\\properties\\application.properties");
+            prop = readPropertiesFile("application.properties");
             System.out.println("Machine Name: " + prop.getProperty("machine.ip"));
             System.out.println("Port No: " + prop.getProperty("port.number"));
         }catch (IOException e){

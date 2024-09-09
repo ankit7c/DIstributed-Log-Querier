@@ -18,7 +18,7 @@ public class client {
 
         System.out.println("Command to be executed is " + command);
 
-        for (int nodes=0; nodes<1; nodes++){
+        for (int nodes=0; nodes<2; nodes++){
             System.out.println(properties.getProperty("peer.machine.ip" + nodes));
             System.out.println(properties.getProperty("peer.machine.port" + nodes));
             client_component client = new client_component(properties.getProperty("peer.machine.ip" + nodes),
