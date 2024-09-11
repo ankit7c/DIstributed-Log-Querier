@@ -27,6 +27,7 @@ public class server {
             System.out.println("Server started");
             System.out.println("Waiting for a client to connect...");
             while(true) {
+//                Thread.sleep(100000);
                 socket = server.accept();
 
                 System.out.println("Client __ is connected to server");
@@ -47,19 +48,27 @@ public class server {
                 List<String> responseList = GrepExecutor.executeGrep(request);
                 //TODO for now printing it later send it back to client
                 System.out.println(responseList);
+                try {
+                    while (!response.equals("Query Completed")) {
 
-                while(!response.equals("Query Completed")){
+                        if (responseList != null && responseList.size() > 0) {
+                            response = "Query Completed";
+                            dataOutputStream.writeUTF(response);
+                            dataOutputStream.flush();
+                        }
+                        else {
+                            response = "Query Failed";
+                            dataOutputStream.writeUTF(response);
+                            dataOutputStream.flush();
+                        }
 
-                    if(true){
-                        response = "Query Completed";
+                        oos = new ObjectOutputStream(socket.getOutputStream());
+                        oos.writeObject(responseList);
                     }
-                    dataOutputStream.writeUTF("Query Completed");
-                    dataOutputStream.flush();
-
-                    oos = new ObjectOutputStream(socket.getOutputStream());
-                    oos.writeObject(responseList);
                 }
-
+                catch (Exception e) {
+                    dataOutputStream.writeUTF("Query Failed");
+                }
                 socket.close();
                 dataOutputStream.close();
                 dataInputStream.close();

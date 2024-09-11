@@ -21,19 +21,22 @@ public class client_component extends Thread {
     }
 //    get_result_from_server : String ip, int port, String command
     public void run() {
-        System.out.println( "establishing a connection to machine " + ipAddress + " " + port);
+        String threadName = Thread.currentThread().getName() + ": ";
+        System.out.println( threadName + "establishing a connection to machine " + ipAddress + " " + port);
 
         // establish a connection
         try {
             Socket socket = null;
             ObjectInputStream ois = null;
-//            ServerSocket serverSocket = new ServerSocket(5001);
+
             try {
                 socket = new Socket(ipAddress, port);
-                System.out.println("Connected");
+                socket.setSoTimeout(10000);
+                System.out.println(threadName + " " + "Connected");
             }
             catch (Exception e) {
-                System.out.println("Unable to connect the machine : " + e);
+                System.out.println(threadName + " " + "Unable to connect the machine with IP Address " + ipAddress + " and Port " + port);
+                throw new RuntimeException();
             }
 
             OutputStream outputStream = socket.getOutputStream();
@@ -46,7 +49,10 @@ public class client_component extends Thread {
             String response = "";
             while(!response.equals("Query Completed")) {
                 response = dataInputStream.readUTF();
-                System.out.println(response);
+                System.out.println(threadName + " " + response);
+                if(response.equals("Query Failed")) {
+                    throw new RuntimeException();
+                }
             }
 
             try {
@@ -56,14 +62,15 @@ public class client_component extends Thread {
                 CLIPrinter cliPrinter = new CLIPrinter();
                 cliPrinter.printResult(obj);
             }catch (Exception e) {
+                System.out.println(threadName + " Error occured while processing the command");
                 e.printStackTrace();
             }
 
             //close the connection
             socket.close();
         }
-        catch (IOException i) {
-            System.out.println(i);
+        catch (Exception i) {
+//            System.out.println(i);
         }
 
     }

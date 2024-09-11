@@ -11,10 +11,10 @@ public class CLIPrinter {
         try{
             lock.lock();
             String threadName = Thread.currentThread().getName();
-            System.out.println("No of lines found are : " + results.size());
-            for (String result : results) {
-                System.out.println(threadName + " " + result);
-            };
+            System.out.println(threadName + " No of lines found are : " + results.size());
+//            for (String result : results) {
+//                System.out.println(threadName + " " + result);
+//            };
             return true;
         }catch (Exception e){
             return false;
