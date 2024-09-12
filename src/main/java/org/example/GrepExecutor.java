@@ -41,7 +41,8 @@ public class GrepExecutor {
             return info1;
         }catch (Exception e){
             e.printStackTrace();
-            return null;
+            throw new RuntimeException("Grep Request Error");
+//            return null;
         }
     }
 

@@ -19,7 +19,7 @@ public class client_component extends Thread {
             this.port = port;
             this.command = command;
     }
-//    get_result_from_server : String ip, int port, String command
+
     public void run() {
         String threadName = Thread.currentThread().getName() + ": ";
         System.out.println( threadName + "establishing a connection to machine " + ipAddress + " " + port);
@@ -35,13 +35,17 @@ public class client_component extends Thread {
                 System.out.println(threadName + " " + "Connected");
             }
             catch (Exception e) {
-                System.out.println(threadName + " " + "Unable to connect the machine with IP Address " + ipAddress + " and Port " + port);
-                throw new RuntimeException();
+//                System.out.println(threadName + " " + "Unable to connect the machine with IP Address " + ipAddress + " and Port " + port);
+                throw new RuntimeException("Unable to connect the machine with IP Address " + ipAddress + " and Port " + port);
             }
 
-            OutputStream outputStream = socket.getOutputStream();
-            DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-            dataOutputStream.writeUTF(command);
+            try {
+                OutputStream outputStream = socket.getOutputStream();
+                DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+                dataOutputStream.writeUTF(command);
+            } catch (Exception e) {
+                throw new RuntimeException("Not able to send command " + command);
+            }
 
             InputStream inputStream = socket.getInputStream();
             DataInputStream dataInputStream = new DataInputStream(inputStream);
@@ -51,7 +55,7 @@ public class client_component extends Thread {
                 response = dataInputStream.readUTF();
                 System.out.println(threadName + " " + response);
                 if(response.equals("Query Failed")) {
-                    throw new RuntimeException();
+                    throw new RuntimeException(response);
                 }
             }
 
@@ -62,15 +66,16 @@ public class client_component extends Thread {
                 CLIPrinter cliPrinter = new CLIPrinter();
                 cliPrinter.printResult(obj);
             }catch (Exception e) {
-                System.out.println(threadName + " Error occured while processing the command");
-                e.printStackTrace();
+//                System.out.println(threadName + " Error occured while processing the command");
+//                e.printStackTrace();
+                throw new RuntimeException("Error occured while processing the result");
             }
 
             //close the connection
             socket.close();
         }
         catch (Exception i) {
-//            System.out.println(i);
+            System.out.println(threadName + " " + i.getMessage());
         }
 
     }

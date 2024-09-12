@@ -18,7 +18,9 @@ public class server {
         Socket socket = null;
         ServerSocket server = null;
         ObjectOutputStream oos = null;
-        // starts server and waits for a connection
+        String request = null;
+        String response = "";
+                // starts server and waits for a connection
         AppConfig appConfig = new AppConfig();
         Properties properties = appConfig.readConfig();
         try
@@ -27,22 +29,17 @@ public class server {
             System.out.println("Server started");
             System.out.println("Waiting for a client to connect...");
             while(true) {
-//                Thread.sleep(100000);
                 socket = server.accept();
-
                 System.out.println("Client __ is connected to server");
 
                 InputStream inputStream = socket.getInputStream();
                 DataInputStream dataInputStream = new DataInputStream(inputStream);
 
-                String request = dataInputStream.readUTF();
+                request = dataInputStream.readUTF();
 
                 OutputStream outputStream = socket.getOutputStream();
                 DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
                 dataOutputStream.writeUTF("command received");
-
-
-                String response = "";
                 //Enter the querying code below
                 //------------
                 List<String> responseList = GrepExecutor.executeGrep(request);
@@ -68,6 +65,7 @@ public class server {
                 }
                 catch (Exception e) {
                     dataOutputStream.writeUTF("Query Failed");
+                    throw new RuntimeException("Query Failed");
                 }
                 socket.close();
                 dataOutputStream.close();
@@ -77,7 +75,7 @@ public class server {
         }
         catch(IOException i)
         {
-            System.out.println(i);
+            System.out.println(i.getMessage());
         }
     }
 
