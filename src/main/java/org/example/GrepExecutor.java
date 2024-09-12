@@ -52,30 +52,30 @@ public class GrepExecutor {
         return grepOutput;
     }
 
-    private static GrepOptionSet_Fcilnvx convertGrepOptions(List<Character>grepOptionsList){
+    private static GrepOptionSet_Fcilnvx convertGrepOptions(List<Character>grepOptionsList) {
         GrepOptionSet_Fcilnvx grepOptions = null;
-        if(grepOptionsList==null || grepOptionsList.isEmpty()){
+        if (grepOptionsList == null || grepOptionsList.isEmpty()) {
             return grepOptions;
         }
-        for(char option : grepOptionsList){
-            if(option == 'n'){
-                grepOptions = (grepOptions==null) ? Grep.Options.n : grepOptions.n;
-            } else if(option == 'c'){
-                grepOptions = (grepOptions==null) ? Grep.Options.c : grepOptions.c;
-            } else if(option == 'l'){
-                grepOptions = (grepOptions==null) ? Grep.Options.l : grepOptions.l;
-            } else if(option == 'x'){
-                grepOptions = (grepOptions==null) ? Grep.Options.x : grepOptions.x;
-            } else if(option == 'i'){
-                grepOptions = (grepOptions==null) ? Grep.Options.i : grepOptions.i;
-            } else if(option == 'v'){
-                grepOptions = (grepOptions==null) ? Grep.Options.v : grepOptions.v;
-            } else if(option == 'F'){
-                grepOptions = (grepOptions==null) ? Grep.Options.F : grepOptions.F;
+        for (char option : grepOptionsList) {
+            if (option == 'n') {
+                grepOptions = (grepOptions == null) ? Grep.Options.n : grepOptions.n;
+            } else if (option == 'c') {
+                grepOptions = (grepOptions == null) ? Grep.Options.c : grepOptions.c;
+            } else if (option == 'l') {
+                grepOptions = (grepOptions == null) ? Grep.Options.l : grepOptions.l;
+            } else if (option == 'x') {
+                grepOptions = (grepOptions == null) ? Grep.Options.x : grepOptions.x;
+            } else if (option == 'i') {
+                grepOptions = (grepOptions == null) ? Grep.Options.i : grepOptions.i;
+            } else if (option == 'v') {
+                grepOptions = (grepOptions == null) ? Grep.Options.v : grepOptions.v;
+            } else if (option == 'F') {
+                grepOptions = (grepOptions == null) ? Grep.Options.F : grepOptions.F;
             }
-        return grepOptions;
+            return grepOptions;
+        }
     }
-}
 }
 
 
