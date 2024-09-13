@@ -9,9 +9,6 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-//        System.out.println("Press 1 for server and 2 for client");
-//        Scanner scanner = new Scanner(System.in);
-//        int choice = scanner.nextInt();
         String choice = args[0];
         System.out.println(args.length);
         if (choice.equals("server")) {

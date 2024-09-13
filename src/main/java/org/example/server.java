@@ -17,42 +17,42 @@ public class server {
         System.out.println("Server is running");
         Socket socket = null;
         ServerSocket server = null;
-        ObjectOutputStream oos = null;
-        // starts server and waits for a connection
+
+                // starts server and waits for a connection
         AppConfig appConfig = new AppConfig();
         Properties properties = appConfig.readConfig();
         try
         {
             server = new ServerSocket(Integer.parseInt(properties.getProperty("port.number")));
-            System.out.println("Server started");
-            System.out.println("Waiting for a client to connect...");
             while(true) {
-//                Thread.sleep(100000);
+                ObjectOutputStream oos = null;
+                String request = null;
+                String response = "";
+                System.out.println("Server started");
+                System.out.println("Waiting for a client to connect...");
                 socket = server.accept();
-
                 System.out.println("Client __ is connected to server");
 
                 InputStream inputStream = socket.getInputStream();
                 DataInputStream dataInputStream = new DataInputStream(inputStream);
 
-                String request = dataInputStream.readUTF();
+                request = dataInputStream.readUTF();
 
                 OutputStream outputStream = socket.getOutputStream();
                 DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
                 dataOutputStream.writeUTF("command received");
-
-
-                String response = "";
                 //Enter the querying code below
                 //------------
-                List<String> responseList = GrepExecutor.executeGrep(request);
+                GrepExecutor grepExecutor = new GrepExecutor();
+                List<String> responseList = grepExecutor.executeGrep(request);
                 //TODO for now printing it later send it back to client
-                System.out.println(responseList);
+                System.out.println(responseList.size());
                 try {
                     while (!response.equals("Query Completed")) {
 
                         if (responseList != null && responseList.size() > 0) {
                             response = "Query Completed";
+                            System.out.println(response);
                             dataOutputStream.writeUTF(response);
                             dataOutputStream.flush();
                         }
@@ -68,16 +68,19 @@ public class server {
                 }
                 catch (Exception e) {
                     dataOutputStream.writeUTF("Query Failed");
+                    throw new RuntimeException("Query Failed");
                 }
-                socket.close();
+//                oos.close();
                 dataOutputStream.close();
                 dataInputStream.close();
-                oos.close();
+
+                socket.close();
             }
+//            server.close();
         }
         catch(IOException i)
         {
-            System.out.println(i);
+            System.out.println(i.getMessage());
         }
     }
 

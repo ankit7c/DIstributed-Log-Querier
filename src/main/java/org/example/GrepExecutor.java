@@ -2,49 +2,85 @@ package org.example;
 
 import org.example.config.AppConfig;
 import org.unix4j.Unix4j;
+import org.unix4j.unix.Grep;
+import org.unix4j.unix.grep.GrepOptionSet_Fcilnvx;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 public class GrepExecutor {
 
-    public static List<String> executeGrep(String request){
-        try {
-            AppConfig appConfig = new AppConfig();
-            Properties properties = appConfig.readConfig();
-            System.out.println("Executing Grep Request: " + request);
-            String[] command = request.split(" ");
-//        command[2] = command[2].replace("\"", "");
-//        System.out.println(command[2]);
-            System.out.println("Executing Grep Command: " + command.length);
-            if (!(command.length == 3 || command.length == 4)) {
-                //TODO Later Throw error for now adding sout
-                System.out.println("Invalid command");
-            }
-            String parameter = "";
-            String pattern = "";
-            String filePath = properties.getProperty("file.path");
+    public List<String> executeGrep(String request){
+        AppConfig appConfig = new AppConfig();
+        Properties properties = appConfig.readConfig();
+        String[] command = request.split(" ");
+        //command[command.length - 1] = command[command.length - 1].replace("\"", "");
+        //System.out.println("Executing Grep Command with length: " + command.length);
 
-            if (command.length == 3) {
-                pattern = command[1];
-//            filePath = command[2];
-            } else if (command.length == 4) {
-                parameter = command[1];
-                pattern = command[2];
-//            filePath = "C:\\\\Users\\\\saura\\\\Documents\\\\Distributed_Systems\\\\Plain_Java\\\\log1.txt";
-            }
-            //TODO For now not utilizing option Add later .
-            File file1 = new File(filePath);
-            List<String> info1 = Unix4j.grep(pattern, file1).toStringList();
-            System.out.println(info1.size());
-            return info1;
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
+        if(!command[0].equals("grep")){
+            throw new IllegalArgumentException("First parameter should be grep");
         }
+        List<Character>optionsList = new ArrayList<>();
+        if(command[1].startsWith("-")){
+            //handling case of -nci
+            String options = command[1];
+            for(int i=1;i<options.length();i++){
+                optionsList.add(options.charAt(i));
+            }
+            //handling case of -n -c -i
+            int k = 2;
+            while(k<command.length){
+                String option = command[k];
+                if(!option.startsWith("-")){
+                    break;
+                } else {
+                    optionsList.add(option.charAt(1));
+                }
+                k++;
+            }
+        }
+        String pattern = command[command.length-1].replace("\"", "");
+        GrepOptionSet_Fcilnvx grepOptions = convertGrepOptions(optionsList);
+
+
+        //TODO Get filetPath from properties file
+        File file = new File(properties.getProperty("file.path"));
+        System.out.println(file.getAbsolutePath());
+        List<String> grepOutput = new ArrayList<>();
+        if(grepOptions!=null){
+            grepOutput = Unix4j.grep(grepOptions,pattern,file).toStringList();
+        } else {
+            grepOutput = Unix4j.grep(pattern,file).toStringList();
+        }
+        return grepOutput;
     }
 
+    private static GrepOptionSet_Fcilnvx convertGrepOptions(List<Character>grepOptionsList) {
+        GrepOptionSet_Fcilnvx grepOptions = null;
+        if (grepOptionsList == null || grepOptionsList.isEmpty()) {
+            return grepOptions;
+        }
+        for (char option : grepOptionsList) {
+            if (option == 'n') {
+                grepOptions = (grepOptions == null) ? Grep.Options.n : grepOptions.n;
+            } else if (option == 'c') {
+                grepOptions = (grepOptions == null) ? Grep.Options.c : grepOptions.c;
+            } else if (option == 'l') {
+                grepOptions = (grepOptions == null) ? Grep.Options.l : grepOptions.l;
+            } else if (option == 'x') {
+                grepOptions = (grepOptions == null) ? Grep.Options.x : grepOptions.x;
+            } else if (option == 'i') {
+                grepOptions = (grepOptions == null) ? Grep.Options.i : grepOptions.i;
+            } else if (option == 'v') {
+                grepOptions = (grepOptions == null) ? Grep.Options.v : grepOptions.v;
+            } else if (option == 'F') {
+                grepOptions = (grepOptions == null) ? Grep.Options.F : grepOptions.F;
+            }
+        }
+        return grepOptions;
+    }
 }
 
 
