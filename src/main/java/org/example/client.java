@@ -18,7 +18,9 @@ public class client {
             System.out.println(properties.getProperty("peer.machine.ip" + nodes));
             System.out.println(properties.getProperty("peer.machine.port" + nodes));
             client_component client = new client_component(properties.getProperty("peer.machine.ip" + nodes),
-                    Integer.parseInt(properties.getProperty("peer.machine.port" + nodes)), command);
+                    Integer.parseInt(properties.getProperty("peer.machine.port" + nodes)),
+                    properties.getProperty("peer.machine.name" + nodes),
+                    command);
             client.start();
         }
 

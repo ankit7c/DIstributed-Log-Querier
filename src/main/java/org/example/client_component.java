@@ -5,6 +5,9 @@ import org.example.config.CLIPrinter;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +16,12 @@ public class client_component extends Thread {
     String ipAddress;
     int port;
     String command;
+    String machineName;
 
-    public client_component(String ipAddress,int port, String command) {
+    public client_component(String ipAddress, int port, String machineName, String command) {
             this.ipAddress = ipAddress;
             this.port = port;
+            this.machineName = machineName;
             this.command = command;
     }
 
@@ -31,7 +36,7 @@ public class client_component extends Thread {
 
             try {
                 socket = new Socket(ipAddress, port);
-                socket.setSoTimeout(10000);
+//                socket.setSoTimeout(10000);
                 System.out.println(threadName + " " + "Connected");
             }
             catch (Exception e) {
@@ -49,7 +54,7 @@ public class client_component extends Thread {
 
             InputStream inputStream = socket.getInputStream();
             DataInputStream dataInputStream = new DataInputStream(inputStream);
-
+            System.out.println(machineName + "response");
             String response = "";
             while(!response.equals("Query Completed")) {
                 response = dataInputStream.readUTF();
@@ -58,6 +63,7 @@ public class client_component extends Thread {
                     throw new RuntimeException(response);
                 }
             }
+            System.out.println(machineName + "response");
 
             try {
                 ois = new ObjectInputStream(socket.getInputStream());
@@ -65,6 +71,11 @@ public class client_component extends Thread {
                 System.out.println(obj.size());
                 CLIPrinter cliPrinter = new CLIPrinter();
                 cliPrinter.printResult(obj);
+
+                Path filePath = Paths.get(machineName + " grePoutput.txt");
+                // Write the list to the file, creating it if it doesn't exist
+                Files.write(filePath, obj);
+                System.out.println(machineName+"File written successfully.");
             }catch (Exception e) {
 //                System.out.println(threadName + " Error occured while processing the command");
 //                e.printStackTrace();

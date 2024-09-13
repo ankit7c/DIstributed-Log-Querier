@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.config.AppConfig;
 import org.unix4j.Unix4j;
 import org.unix4j.unix.Grep;
 import org.unix4j.unix.grep.GrepOptionSet_Fcilnvx;
@@ -7,10 +8,13 @@ import org.unix4j.unix.grep.GrepOptionSet_Fcilnvx;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class GrepExecutor {
 
-    public static List<String> executeGrep(String request){
+    public List<String> executeGrep(String request){
+        AppConfig appConfig = new AppConfig();
+        Properties properties = appConfig.readConfig();
         String[] command = request.split(" ");
         //command[command.length - 1] = command[command.length - 1].replace("\"", "");
         //System.out.println("Executing Grep Command with length: " + command.length);
@@ -42,7 +46,8 @@ public class GrepExecutor {
 
 
         //TODO Get filetPath from properties file
-        File file = new File("D:\\Distributed Systems\\logs\\vm1.log");
+        File file = new File(properties.getProperty("file.path"));
+        System.out.println(file.getAbsolutePath());
         List<String> grepOutput = new ArrayList<>();
         if(grepOptions!=null){
             grepOutput = Unix4j.grep(grepOptions,pattern,file).toStringList();
@@ -73,8 +78,8 @@ public class GrepExecutor {
             } else if (option == 'F') {
                 grepOptions = (grepOptions == null) ? Grep.Options.F : grepOptions.F;
             }
-            return grepOptions;
         }
+        return grepOptions;
     }
 }
 
