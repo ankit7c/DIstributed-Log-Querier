@@ -12,11 +12,14 @@ public class CLIPrinter {
     public ReentrantLock lock = new ReentrantLock();
     private static final Logger logger = LoggerFactory.getLogger(CLIPrinter.class);
 
-    public boolean printResult(List<String> results) {
+    public boolean printResult(List<String> results, List<Character> optionsList, String machineName) {
         try{
             lock.lock();
             String threadName = Thread.currentThread().getName();
-            logger.info(threadName + " No of lines found are : " + results.size());
+            if(!optionsList.isEmpty() && optionsList.contains('c'))
+                logger.info( machineName + " No of lines found are : " + results.get(0));
+            else
+                logger.info( machineName + " No of lines found are : " + results.size());
             return true;
         }catch (Exception e){
             return false;

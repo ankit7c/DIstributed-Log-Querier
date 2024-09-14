@@ -1,11 +1,23 @@
 package org.example;
 
 import org.example.config.AppConfig;
+import org.example.entities.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+//import org.unix4j.Unix4j;
+//import org.unix4j.unix.Grep;
+//import org.unix4j.unix.grep.GrepOptionSet_Fcilnvx;
 import org.unix4j.Unix4j;
+import org.unix4j.io.Output;
+import org.unix4j.io.StreamOutput;
+import org.unix4j.unix.Cut;
 import org.unix4j.unix.Grep;
+import org.unix4j.unix.Ls;
+import org.unix4j.unix.Sort;
+import org.unix4j.unix.grep.GrepOption;
 import org.unix4j.unix.grep.GrepOptionSet_Fcilnvx;
+import org.unix4j.util.Range;
+import org.unix4j.variable.Arg;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,45 +29,46 @@ public class GrepExecutor {
     public List<String> executeGrep(String request){
         AppConfig appConfig = new AppConfig();
         Properties properties = appConfig.readConfig();
-        String[] command = request.split(" ");
-        //command[command.length - 1] = command[command.length - 1].replace("\"", "");
-        //System.out.println("Executing Grep Command with length: " + command.length);
-
-        if(!command[0].equals("grep")){
-            throw new IllegalArgumentException("First parameter should be grep");
-        }
-        List<Character>optionsList = new ArrayList<>();
-        if(command[1].startsWith("-")){
-            //handling case of -nci
-            String options = command[1];
-            for(int i=1;i<options.length();i++){
-                optionsList.add(options.charAt(i));
-            }
-            //handling case of -n -c -i
-            int k = 2;
-            while(k<command.length){
-                String option = command[k];
-                if(!option.startsWith("-")){
-                    break;
-                } else {
-                    optionsList.add(option.charAt(1));
-                }
-                k++;
-            }
-        }
-        String pattern = command[command.length-1].replace("\"", "");
-        GrepOptionSet_Fcilnvx grepOptions = convertGrepOptions(optionsList);
+//        String[] command = request.split(" ");
+//        //command[command.length - 1] = command[command.length - 1].replace("\"", "");
+//        //System.out.println("Executing Grep Command with length: " + command.length);
+//
+//        if(!command[0].equals("grep")){
+//            throw new IllegalArgumentException("First parameter should be grep");
+//        }
+//        List<Character>optionsList = new ArrayList<>();
+//        if(command[1].startsWith("-")){
+//            //handling case of -nci
+//            String options = command[1];
+//            for(int i=1;i<options.length();i++){
+//                optionsList.add(options.charAt(i));
+//            }
+//            //handling case of -n -c -i
+//            int k = 2;
+//            while(k<command.length){
+//                String option = command[k];
+//                if(!option.startsWith("-")){
+//                    break;
+//                } else {
+//                    optionsList.add(option.charAt(1));
+//                }
+//                k++;
+//            }
+//        }
+//        String pattern = command[command.length-1].replace("\"", "");
+        Command command = CommandProcessor.processCommand(request);
+        GrepOptionSet_Fcilnvx grepOptions = convertGrepOptions(command.getOptionsList());
 
         List<String> grepOutput = new ArrayList<>();
         try {
             //TODO Get filetPath from properties file
             File file = new File(properties.getProperty("file.path"));
-            System.out.println(file.getAbsolutePath());
+//            System.out.println(file.getAbsolutePath());
 
             if (grepOptions != null) {
-                grepOutput = Unix4j.grep(grepOptions, pattern, file).toStringList();
+                grepOutput = Unix4j.grep(grepOptions, command.getPattern(), file).toStringList();
             } else {
-                grepOutput = Unix4j.grep(pattern, file).toStringList();
+                grepOutput = Unix4j.grep(command.getPattern(), file).toStringList();
             }
         }catch (Exception e){
             throw new RuntimeException("Unable to execute grep", e);

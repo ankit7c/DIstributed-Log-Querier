@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.config.CLIPrinter;
+import org.example.entities.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,26 +57,28 @@ public class client_component extends Thread {
 
             InputStream inputStream = socket.getInputStream();
             DataInputStream dataInputStream = new DataInputStream(inputStream);
-            logger.info(machineName + "response");
+
             String response = "";
             while(!response.equals("Query Completed")) {
                 response = dataInputStream.readUTF();
                 if(response.contains("Query Failed")) {
                     throw new RuntimeException(response);
                 }
-                logger.info(machineName + "response");
+                logger.info(machineName + " " + response);
             }
+
+            Command c = CommandProcessor.processCommand(command);
 
             try {
                 ois = new ObjectInputStream(socket.getInputStream());
                 List<String> obj = (List<String>) ois.readObject();
                 CLIPrinter cliPrinter = new CLIPrinter();
-                cliPrinter.printResult(obj);
+                cliPrinter.printResult(obj, c.getOptionsList(), machineName);
 
                 Path filePath = Paths.get(machineName + "GrepOutput.txt");
                 // Write the list to the file, creating it if it doesn't exist
                 Files.write(filePath, obj);
-                logger.info(machineName + " File written successfully.");
+                logger.info("File written successfully for machine : " + machineName);
             }catch (Exception e) {
                 throw new RuntimeException("Error occured while processing the result");
             }
