@@ -1,16 +1,17 @@
 package org.example;
 
 import org.example.config.AppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Scanner;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) {
 
         String choice = args[0];
-        System.out.println(args.length);
         if (choice.equals("server")) {
             server s = new server();
             s.run_server();
@@ -18,7 +19,7 @@ public class Main {
             client c = new client();
             c.run_client(args[1]);
         }else {
-            System.out.println("Invalid choice");
+            logger.error("Invalid choice");
         }
     }
 }

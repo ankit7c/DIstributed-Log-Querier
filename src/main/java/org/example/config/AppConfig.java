@@ -11,8 +11,6 @@ public class AppConfig {
         Properties prop = null;
         try {
             prop = readPropertiesFile("application.properties");
-            System.out.println("Machine Name: " + prop.getProperty("machine.ip"));
-            System.out.println("Port No: " + prop.getProperty("port.number"));
         }catch (IOException e){
             e.printStackTrace();
         }

@@ -1,6 +1,8 @@
 package org.example;
 
 import org.example.config.AppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.unix4j.Unix4j;
 import org.unix4j.unix.Grep;
 import org.unix4j.unix.grep.GrepOptionSet_Fcilnvx;
@@ -44,15 +46,19 @@ public class GrepExecutor {
         String pattern = command[command.length-1].replace("\"", "");
         GrepOptionSet_Fcilnvx grepOptions = convertGrepOptions(optionsList);
 
-
-        //TODO Get filetPath from properties file
-        File file = new File(properties.getProperty("file.path"));
-        System.out.println(file.getAbsolutePath());
         List<String> grepOutput = new ArrayList<>();
-        if(grepOptions!=null){
-            grepOutput = Unix4j.grep(grepOptions,pattern,file).toStringList();
-        } else {
-            grepOutput = Unix4j.grep(pattern,file).toStringList();
+        try {
+            //TODO Get filetPath from properties file
+            File file = new File(properties.getProperty("file.path"));
+            System.out.println(file.getAbsolutePath());
+
+            if (grepOptions != null) {
+                grepOutput = Unix4j.grep(grepOptions, pattern, file).toStringList();
+            } else {
+                grepOutput = Unix4j.grep(pattern, file).toStringList();
+            }
+        }catch (Exception e){
+            throw new RuntimeException("Unable to execute grep", e);
         }
         return grepOutput;
     }

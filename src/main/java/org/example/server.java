@@ -1,6 +1,8 @@
 package org.example;
 
 import org.example.config.AppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.unix4j.Unix4j;
 
 import java.io.*;
@@ -13,12 +15,12 @@ import java.util.Properties;
 
 public class server {
 
+    private static final Logger logger = LoggerFactory.getLogger(server.class);
+
     public void run_server(){
-        System.out.println("Server is running");
         Socket socket = null;
         ServerSocket server = null;
 
-                // starts server and waits for a connection
         AppConfig appConfig = new AppConfig();
         Properties properties = appConfig.readConfig();
         try
@@ -28,10 +30,10 @@ public class server {
                 ObjectOutputStream oos = null;
                 String request = null;
                 String response = "";
-                System.out.println("Server started");
-                System.out.println("Waiting for a client to connect...");
+                logger.info("Server started");
+                logger.info("Waiting for a client to connect...");
                 socket = server.accept();
-                System.out.println("Client __ is connected to server");
+                logger.info("Client __ is connected to server");
 
                 InputStream inputStream = socket.getInputStream();
                 DataInputStream dataInputStream = new DataInputStream(inputStream);
@@ -41,36 +43,43 @@ public class server {
                 OutputStream outputStream = socket.getOutputStream();
                 DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
                 dataOutputStream.writeUTF("command received");
-                //Enter the querying code below
-                //------------
+
+                // Code for executing the Grep Command
                 GrepExecutor grepExecutor = new GrepExecutor();
                 List<String> responseList = grepExecutor.executeGrep(request);
                 //TODO for now printing it later send it back to client
-                System.out.println(responseList.size());
+                logger.info("No of Lines returned : " + responseList.size());
                 try {
-                    while (!response.equals("Query Completed")) {
-
-                        if (responseList != null && responseList.size() > 0) {
-                            response = "Query Completed";
-                            System.out.println(response);
-                            dataOutputStream.writeUTF(response);
-                            dataOutputStream.flush();
-                        }
-                        else {
-                            response = "Query Failed";
-                            dataOutputStream.writeUTF(response);
-                            dataOutputStream.flush();
-                        }
-
-                        oos = new ObjectOutputStream(socket.getOutputStream());
-                        oos.writeObject(responseList);
-                    }
+//                    while (!response.equals("Query Completed")) {
+//
+//                        if (responseList != null && !responseList.isEmpty()) {
+//                            response = "Query Completed";
+//                            logger.info(response);
+//                            dataOutputStream.writeUTF(response);
+//                            dataOutputStream.flush();
+//                        }
+//                        else {
+//                            response = "Query Failed";
+//                            dataOutputStream.writeUTF(response);
+//                            dataOutputStream.flush();
+//                        }
+//
+//                        oos = new ObjectOutputStream(socket.getOutputStream());
+//                        oos.writeObject(responseList);
+//                    }
+                    response = "Query Completed";
+                    logger.info(response);
+                    dataOutputStream.writeUTF(response);
+                    dataOutputStream.flush();
+                    oos = new ObjectOutputStream(socket.getOutputStream());
+                    oos.writeObject(responseList);
                 }
                 catch (Exception e) {
-                    dataOutputStream.writeUTF("Query Failed");
-                    throw new RuntimeException("Query Failed");
+                    dataOutputStream.writeUTF("Query Failed" + e.getMessage());
+                    dataOutputStream.flush();
+                    throw new RuntimeException("Query Failed" + e.getMessage());
                 }
-//                oos.close();
+
                 dataOutputStream.close();
                 dataInputStream.close();
 
