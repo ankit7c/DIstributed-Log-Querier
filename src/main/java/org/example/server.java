@@ -45,7 +45,7 @@ public class server {
                 dataOutputStream.writeUTF("command received");
 
                 // Code for executing the Grep Command
-                GrepExecutor grepExecutor = new GrepExecutor();
+                GrepExecutor grepExecutor = new GrepExecutor(properties.getProperty("file.path"));
                 List<String> responseList = grepExecutor.executeGrep(request);
                 //TODO for now printing it later send it back to client
                 logger.info("No of Lines returned : " + responseList.size());
