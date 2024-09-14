@@ -1,11 +1,11 @@
 package org.example;
 
-import org.example.config.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Scanner;
-
+/**
+ * This class is main entry point
+ */
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
@@ -17,7 +17,7 @@ public class Main {
             s.run_server();
         }else if(choice.equals("client")){
             client c = new client();
-            c.run_client(args[1]);
+            c.runClient(args[1]);
         }else {
             logger.error("Invalid choice");
         }

@@ -9,7 +9,7 @@ public class client {
 
     private static final Logger logger = LoggerFactory.getLogger(client.class);
 
-    public void run_client(String command){
+    public void runClient(String command){
 
         AppConfig appConfig = new AppConfig();
         Properties properties = appConfig.readConfig();

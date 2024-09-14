@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class contains command process logic
+ */
 public class CommandProcessor {
     private static final Logger logger = LoggerFactory.getLogger(GrepExecutor.class);
     public static Command processCommand(String request) {

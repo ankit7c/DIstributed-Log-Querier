@@ -3,13 +3,10 @@ package org.example;
 import org.example.config.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.unix4j.Unix4j;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.MessageDigestSpi;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 

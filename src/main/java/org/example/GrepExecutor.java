@@ -11,6 +11,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class contains grep related operations
+ */
 public class GrepExecutor {
     private static final Logger logger = LoggerFactory.getLogger(GrepExecutor.class);
     private String filePath = "";
