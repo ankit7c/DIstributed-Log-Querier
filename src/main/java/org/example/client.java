@@ -4,9 +4,7 @@ import org.example.config.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Properties;
-import java.util.Scanner;
 public class client {
 
     private static final Logger logger = LoggerFactory.getLogger(client.class);
@@ -29,116 +27,4 @@ public class client {
 
 
 }
-
-//class Solution {
-
-
-
-//    public boolean compute(int[] nums) {
-//
-//        ArrayList<Integer> lastdigits = new ArrayList();
-//        int start = 0;
-//        int lastnumber = 0;
-//        int nullno = -1001;
-//        ArrayList<Integer> temp = new ArrayList();
-//        temp.add(nums[0]);
-//        lastnumber = nums[0];
-//        nums[0] = nullno;
-//        ArrayList<Integer> remaining = new ArrayList();
-//        for(int i=1;i<nums.length;i++){
-//            if(nums[i] != nullno) {
-//                // System.out.println(lastnumber);
-//                if (nums[i] - lastnumber == 1) {
-//                    temp.add(nums[i]);
-//                    System.out.println(nums[i]);
-//                    lastnumber = nums[i];
-//                    nums[i] = nullno;
-//                    start = i;
-//                } else if (nums[i] - lastnumber > 1) {
-//                    remaining.addAll(temp);
-//                    temp.clear();
-//                    start = i;
-//                } else {
-//                    remaining.add(nums[i]);
-//                    nums[i] = nullno;
-//                }
-//                if (temp.size() == 3) {
-//                    System.out.println("found 1");
-//                    lastdigits.add(temp.get(2));
-//                    temp.clear();
-//                    start = i++;
-//                    if(i<nums.length) {
-//                        temp.add(nums[i]);
-//                        lastnumber = nums[i];
-//                        nums[i] = nullno;
-//                    }
-//                }
-//            }
-//        }
-//        remaining.addAll(temp);
-//        System.out.println(remaining.size());
-//        for (int i=0; i<remaining.size(); i++){
-//            if(lastdigits.contains(remaining.get(i) - 1)){
-//                lastdigits.set(lastdigits.indexOf(remaining.get(i) - 1), remaining.get(i));
-//            }else {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-//
-//    public boolean compute2(int[] nums) {
-//
-//        ArrayList<ArrayList<Integer>> arr = new ArrayList();
-//
-//        ArrayList<Integer> lastdigits = new ArrayList();
-//        int start = 0;
-//        int lastnumber = 0;
-//        int nullno = -1001;
-//        ArrayList<Integer> temp = new ArrayList();
-//        temp.add(nums[0]);
-//        lastnumber = nums[0];
-//        nums[0] = nullno;
-//        ArrayList<Integer> remaining = new ArrayList();
-//
-//        for(int i=1;i<nums.length;i++){
-//            if(nums[i] != nullno) {
-//                if (nums[i] - lastnumber == 1) {
-//                    temp.add(nums[i]);
-//                    System.out.println(nums[i]);
-//                    lastnumber = nums[i];
-//                    nums[i] = nullno;
-//                } else if (nums[i] - lastnumber > 1) {
-//                    remaining.addAll(temp);
-//                    temp.clear();
-//                    start = i;
-//                } else {
-//                    remaining.add(nums[i]);
-//                    nums[i] = nullno;
-//                }
-//                if (temp.size() == 3) {
-//                    System.out.println("found 1");
-//                    lastdigits.add(temp.get(2));
-//                    temp.clear();
-//                    start = i++;
-//                    if(i<nums.length) {
-//                        temp.add(nums[i]);
-//                        lastnumber = nums[i];
-//                        nums[i] = nullno;
-//                    }
-//                }
-//        }
-//        remaining.addAll(temp);
-//        System.out.println(remaining.size());
-//        for (int i=0; i<remaining.size(); i++){
-//            if(lastdigits.contains(remaining.get(i) - 1)){
-//                lastdigits.set(lastdigits.indexOf(remaining.get(i) - 1), remaining.get(i));
-//            }else {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-//}
-
 
