@@ -61,6 +61,9 @@ public class GrepExecutorTest {
         }
     }
 
+    /**
+     * This junit tests the -n option of grep
+     */
     @Test
     public void grepparameter_n_Test() {
         String command = "grep -n \"GET\"";
@@ -69,6 +72,9 @@ public class GrepExecutorTest {
 
     }
 
+    /**
+     * This junit tests the -c option of grep
+     */
     @Test
     public void grepParameter_c_Test() {
         String command = "grep -c \"GET\"";
@@ -77,6 +83,9 @@ public class GrepExecutorTest {
 
     }
 
+    /**
+     * This junit tests the -i option of grep
+     */
     @Test
     public void grepParameter_i_Test() {
         String command = "grep -i \"PUT\"";
@@ -84,7 +93,9 @@ public class GrepExecutorTest {
         assertEquals(expectedResults.put_i,grepResult,"Grep command failed for Pattern PUT and parameter i");
 
     }
-
+    /**
+     * This junit tests the combined option (-ni) of grep
+     */
     @Test
     public void grepParameter_nI_Test() {
         String command = "grep -ni \"PUT\"";
@@ -92,12 +103,25 @@ public class GrepExecutorTest {
         assertEquals(expectedResults.put_ni,grepResult,"Grep command failed for Pattern PUT and parameter -ni");
 
     }
-
+    /**
+     * This junit tests the combined option (-n -i) of grep
+     */
     @Test
     public void grepParameter_n_ITest() {
         String command = "grep -n -i \"PUT\"";
         List<String> grepResult = grepExecutor.executeGrep(command);
         assertEquals(expectedResults.put_ni,grepResult,"Grep command failed for Pattern GET and parameter -n -i");
+
+    }
+
+    /**
+     * This junit tests the regex
+     */
+    @Test
+    public void regexTest() {
+        String command = "grep -c \".*2024.*\"";
+        List<String> grepResult = grepExecutor.executeGrep(command);
+        assertEquals("31",grepResult.get(0),"Grep command failed for  regex");
 
     }
 

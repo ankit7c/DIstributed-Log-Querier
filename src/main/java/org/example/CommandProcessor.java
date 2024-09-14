@@ -1,16 +1,19 @@
 package org.example;
 
 import org.example.entities.Command;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommandProcessor {
-
+    private static final Logger logger = LoggerFactory.getLogger(GrepExecutor.class);
     public static Command processCommand(String request) {
-
+        logger.info("---->Entering processCommand with request: " + request);
         String[] command = request.split(" ");
         if(!command[0].equals("grep")){
+            logger.error("Invalid command passed");
             throw new IllegalArgumentException("First parameter should be grep");
         }
         List<Character> optionsList = new ArrayList<>();
@@ -32,6 +35,7 @@ public class CommandProcessor {
                 k++;
             }
         }
+        logger.info("---->Exiting processCommand");
         return new Command(command[0], optionsList, command[command.length-1].replace("\"", ""));
     }
 }

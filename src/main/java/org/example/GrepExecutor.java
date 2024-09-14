@@ -1,6 +1,8 @@
 package org.example;
 
 import org.example.entities.Command;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.unix4j.Unix4j;
 import org.unix4j.unix.Grep;
 import org.unix4j.unix.grep.GrepOptionSet_Fcilnvx;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GrepExecutor {
-
+    private static final Logger logger = LoggerFactory.getLogger(GrepExecutor.class);
     private String filePath = "";
     public GrepExecutor(String filePath) {
             this.filePath = filePath;
@@ -22,6 +24,7 @@ public class GrepExecutor {
      * @return list of strings
      */
     public List<String> executeGrep(String request){
+        logger.info("---->Entering Execute Grep");
         Command command = CommandProcessor.processCommand(request);
         GrepOptionSet_Fcilnvx grepOptions = convertGrepOptions(command.getOptionsList());
         List<String> grepOutput = new ArrayList<>();
@@ -35,6 +38,7 @@ public class GrepExecutor {
         }catch (Exception e){
             throw new RuntimeException("Unable to execute grep", e);
         }
+        logger.info("<----Exiting Execute Grep");
         return grepOutput;
     }
 
@@ -44,6 +48,7 @@ public class GrepExecutor {
      * @return GrepOptionSet_Fcilnvx
      */
     private  GrepOptionSet_Fcilnvx convertGrepOptions(List<Character>grepOptionsList) {
+        logger.info("---->Entering convertGrepOptions with options"+grepOptionsList);
         GrepOptionSet_Fcilnvx grepOptions = null;
         if (grepOptionsList == null || grepOptionsList.isEmpty()) {
             return grepOptions;
@@ -65,6 +70,7 @@ public class GrepExecutor {
                 grepOptions = (grepOptions == null) ? Grep.Options.F : grepOptions.F;
             }
         }
+        logger.info("<----Exiting convertGrepOptions conversion completed");
         return grepOptions;
     }
 }
