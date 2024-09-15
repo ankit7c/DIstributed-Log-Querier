@@ -10,11 +10,17 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Properties;
 
-public class server {
+/**
+ * This class contains Server related logic
+ */
+public class Server {
 
-    private static final Logger logger = LoggerFactory.getLogger(server.class);
+    private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
-    public void run_server(){
+    /**
+     * This functions connects to Server and passes the command and then prints and save the result.
+     */
+    public void runClient(){
         Socket socket = null;
         ServerSocket server = null;
 
@@ -28,9 +34,9 @@ public class server {
                 String request = null;
                 String response = "";
                 logger.info("Server started");
-                logger.info("Waiting for a client to connect...");
+                logger.info("Waiting for a Client to connect...");
                 socket = server.accept();
-                logger.info("Client __ is connected to server");
+                logger.info("Client __ is connected to Server");
 
                 InputStream inputStream = socket.getInputStream();
                 DataInputStream dataInputStream = new DataInputStream(inputStream);
@@ -44,7 +50,7 @@ public class server {
                 // Code for executing the Grep Command
                 GrepExecutor grepExecutor = new GrepExecutor(properties.getProperty("file.path"));
                 List<String> responseList = grepExecutor.executeGrep(request);
-                //TODO for now printing it later send it back to client
+                //TODO for now printing it later send it back to Client
                 logger.info("No of Lines returned : " + responseList.size());
                 try {
 //                    while (!response.equals("Query Completed")) {
@@ -82,7 +88,7 @@ public class server {
 
                 socket.close();
             }
-//            server.close();
+//            Server.close();
         }
         catch(IOException i)
         {

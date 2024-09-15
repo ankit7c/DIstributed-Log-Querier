@@ -68,7 +68,7 @@ public class GrepExecutorTest {
     public void grepparameter_n_Test() {
         String command = "grep -n \"GET\"";
         List<String> grepResult = grepExecutor.executeGrep(command);
-        assertEquals(expectedResults.get_n, grepResult,"Grep command failed for Pattern GET and parameter n");
+        assertEquals(ExpectedResults.get_n, grepResult,"Grep command failed for Pattern GET and parameter n");
 
     }
 
@@ -90,7 +90,7 @@ public class GrepExecutorTest {
     public void grepParameter_i_Test() {
         String command = "grep -i \"PUT\"";
         List<String> grepResult = grepExecutor.executeGrep(command);
-        assertEquals(expectedResults.put_i,grepResult,"Grep command failed for Pattern PUT and parameter i");
+        assertEquals(ExpectedResults.put_i,grepResult,"Grep command failed for Pattern PUT and parameter i");
 
     }
     /**
@@ -100,7 +100,7 @@ public class GrepExecutorTest {
     public void grepParameter_nI_Test() {
         String command = "grep -ni \"PUT\"";
         List<String> grepResult = grepExecutor.executeGrep(command);
-        assertEquals(expectedResults.put_ni,grepResult,"Grep command failed for Pattern PUT and parameter -ni");
+        assertEquals(ExpectedResults.put_ni,grepResult,"Grep command failed for Pattern PUT and parameter -ni");
 
     }
     /**
@@ -110,7 +110,7 @@ public class GrepExecutorTest {
     public void grepParameter_n_ITest() {
         String command = "grep -n -i \"PUT\"";
         List<String> grepResult = grepExecutor.executeGrep(command);
-        assertEquals(expectedResults.put_ni,grepResult,"Grep command failed for Pattern GET and parameter -n -i");
+        assertEquals(ExpectedResults.put_ni,grepResult,"Grep command failed for Pattern GET and parameter -n -i");
 
     }
 

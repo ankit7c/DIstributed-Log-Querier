@@ -2,6 +2,9 @@ package org.example.entities;
 
 import java.util.List;
 
+/**
+ * This class is the Command object.
+ */
 public class Command {
     String grep;
     List<Character> optionsList;

@@ -7,28 +7,32 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
-public class client_component extends Thread {
+/**
+ * This class contains the multithreaded code for connecting to the Server
+ */
+public class ClientComponent extends Thread {
 
     String ipAddress;
     int port;
     String command;
     String machineName;
-    private static final Logger logger = LoggerFactory.getLogger(client_component.class);
+    private static final Logger logger = LoggerFactory.getLogger(ClientComponent.class);
 
-    public client_component(String ipAddress, int port, String machineName, String command) {
+    public ClientComponent(String ipAddress, int port, String machineName, String command) {
             this.ipAddress = ipAddress;
             this.port = port;
             this.machineName = machineName;
             this.command = command;
     }
 
+    /**
+     * This functions connects to Server and passes the command and then prints and save the result.
+     */
     public void run() {
         String threadName = Thread.currentThread().getName() + ": ";
         logger.info( threadName + "establishing a connection to machine : " + machineName + " " + ipAddress + " " + port);

@@ -4,6 +4,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * This Class is used to read properties
+ */
 public class AppConfig {
 
     public Properties readConfig(){
@@ -16,6 +19,11 @@ public class AppConfig {
         return prop;
     }
 
+    /**
+     * This functions reads a property file and passes the values with the properties object.
+     * @param fileName Name of the file with th properties
+     * @return return Properties object with key value pairs.
+     */
     public static Properties readPropertiesFile(String fileName) throws IOException {
         FileInputStream fis = null;
         Properties prop = null;

@@ -6,11 +6,21 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * This class contains Printing logic with lock
+ */
 public class CLIPrinter {
 
     public ReentrantLock lock = new ReentrantLock();
     private static final Logger logger = LoggerFactory.getLogger(CLIPrinter.class);
 
+    /**
+     * This method processes the grep command and return the grep command result.
+     * @param results the result returned by the Server.
+     * @param optionsList options passed for grep command.
+     * @param machineName Name of the machine from which the result was received.
+     * @return returns true if output is successfully printed.
+     */
     public boolean printResult(List<String> results, List<Character> optionsList, String machineName) {
         try{
             lock.lock();

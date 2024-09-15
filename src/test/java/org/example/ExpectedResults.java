@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * This class contains expected results for grep commands
  */
-public class expectedResults {
+public class ExpectedResults {
     public static final List<String> get_n = List.of(
             "2:INFO: GET log Entry: 0",
             "6:INFO: GET log Entry: 2",
@@ -54,6 +54,4 @@ public class expectedResults {
 
     );
 
-
-    public static final List<String> EXPECTED_LIST_2 = List.of("lineA", "lineB", "lineC");
 }

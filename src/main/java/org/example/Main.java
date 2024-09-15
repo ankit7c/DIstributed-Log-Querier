@@ -12,11 +12,11 @@ public class Main {
     public static void main(String[] args) {
 
         String choice = args[0];
-        if (choice.equals("server")) {
-            server s = new server();
-            s.run_server();
-        }else if(choice.equals("client")){
-            client c = new client();
+        if (choice.equals("Server")) {
+            Server s = new Server();
+            s.runClient();
+        }else if(choice.equals("Client")){
+            Client c = new Client();
             c.runClient(args[1]);
         }else {
             logger.error("Invalid choice");
