@@ -41,21 +41,24 @@ Edit the properties file to set up the respective IP, port number, and file path
 
 <img src="images/After.png" alt="After" style="width: 300px; height: auto;"/>
 
-4) After editing & saving the application.properties, build the project using:
+4) Move the log files from your local machine to the VMs (Sample command):
+
+```
+scp {log file path/log file Name}.log netid@{VM ip}:{Path to the git repository folder on the vm}
+```
+
+5) After editing  the application.properties & adding log file on VM , build the project using:
 ```
 mvn clean install
 ```
 
-5) After building, move the JAR file one level up:
+6) After building, move the JAR file one level up:
 ```
 cd target/
 mv mp1-1.jar ../
+cd ..
 ```
-6) Move the log files from your local machine to the VMs (Sample command):
 
-```
-scp {log file Name}.log netid@{VM ip}:{Path to the git repository}
-```
 
 7) Run the server using:
 
