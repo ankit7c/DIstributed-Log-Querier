@@ -58,3 +58,6 @@ forward engine
 03/22 08:52:50 INFO   :.......init_policyAPI: APIInitialize:  Exiting
  
 03/22 08:52:50 INFO   :.......init_policyAPI: RegisterWithPolicyAPI:  Entering
+info
+info
+info__dog

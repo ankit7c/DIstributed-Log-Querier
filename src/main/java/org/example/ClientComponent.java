@@ -1,33 +1,41 @@
 package org.example;
 
 import org.example.config.CLIPrinter;
+import org.example.entities.Command;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
-public class client_component extends Thread {
+/**
+ * This class contains the multithreaded code for connecting to the Server
+ */
+public class ClientComponent extends Thread {
 
     String ipAddress;
     int port;
     String command;
     String machineName;
+    private static final Logger logger = LoggerFactory.getLogger(ClientComponent.class);
 
-    public client_component(String ipAddress, int port, String machineName, String command) {
+    public ClientComponent(String ipAddress, int port, String machineName, String command) {
             this.ipAddress = ipAddress;
             this.port = port;
             this.machineName = machineName;
             this.command = command;
     }
 
+    /**
+     * This functions connects to Server and passes the command and then prints and save the result.
+     */
     public void run() {
         String threadName = Thread.currentThread().getName() + ": ";
-        System.out.println( threadName + "establishing a connection to machine " + ipAddress + " " + port);
+        logger.info( threadName + "establishing a connection to machine : " + machineName + " " + ipAddress + " " + port);
 
         // establish a connection
         try {
@@ -36,12 +44,11 @@ public class client_component extends Thread {
 
             try {
                 socket = new Socket(ipAddress, port);
-//                socket.setSoTimeout(10000);
-                System.out.println(threadName + " " + "Connected");
+                socket.setSoTimeout(600000);
+                logger.info(machineName + " " + "Connected");
             }
             catch (Exception e) {
-//                System.out.println(threadName + " " + "Unable to connect the machine with IP Address " + ipAddress + " and Port " + port);
-                throw new RuntimeException("Unable to connect the machine with IP Address " + ipAddress + " and Port " + port);
+                throw new RuntimeException("Unable to connect the machine with Machine Name " + machineName + " IP Address " + ipAddress + " and Port " + port + " due to " + e.getMessage());
             }
 
             try {
@@ -54,31 +61,29 @@ public class client_component extends Thread {
 
             InputStream inputStream = socket.getInputStream();
             DataInputStream dataInputStream = new DataInputStream(inputStream);
-            System.out.println(machineName + "response");
+
             String response = "";
             while(!response.equals("Query Completed")) {
                 response = dataInputStream.readUTF();
-                System.out.println(threadName + " " + response);
-                if(response.equals("Query Failed")) {
+                if(response.contains("Query Failed")) {
                     throw new RuntimeException(response);
                 }
+                logger.info(machineName + " " + response);
             }
-            System.out.println(machineName + "response");
+
+            Command c = CommandProcessor.processCommand(command);
 
             try {
                 ois = new ObjectInputStream(socket.getInputStream());
                 List<String> obj = (List<String>) ois.readObject();
-                System.out.println(obj.size());
                 CLIPrinter cliPrinter = new CLIPrinter();
-                cliPrinter.printResult(obj);
+                cliPrinter.printResult(obj, c.getOptionsList(), machineName);
 
-                Path filePath = Paths.get(machineName + " grePoutput.txt");
+                Path filePath = Paths.get(machineName + "GrepOutput.txt");
                 // Write the list to the file, creating it if it doesn't exist
                 Files.write(filePath, obj);
-                System.out.println(machineName+"File written successfully.");
+                logger.info("File written successfully for machine : " + machineName);
             }catch (Exception e) {
-//                System.out.println(threadName + " Error occured while processing the command");
-//                e.printStackTrace();
                 throw new RuntimeException("Error occured while processing the result");
             }
 
@@ -86,7 +91,7 @@ public class client_component extends Thread {
             socket.close();
         }
         catch (Exception i) {
-            System.out.println(threadName + " " + i.getMessage());
+            logger.error(machineName + " " + i.getMessage());
         }
 
     }
