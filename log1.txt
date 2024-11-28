@@ -19,7 +19,7 @@
 03/22 08:51:11 INFO   :..mailbox_register: mailbox allocated for dump
 03/22 08:51:11 INFO   :...mailslot_create: creating mailslot for (broken) pipe
 03/22 08:51:11 INFO   :..mailbox_register: mailbox allocated for pipe
- 07 
+ 07
 03/22 08:51:11 INFO   :.main: rsvpd initialization complete
  08 
 03/22 08:52:50 INFO   :......rsvp_api_open: accepted a new connection for rapi
